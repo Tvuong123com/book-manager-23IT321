@@ -1,0 +1,71 @@
+<section class="hero" aria-labelledby="page-title">
+  <div class="hero-copy">
+    <span class="eyebrow"><span class="eyebrow-dot"></span> KHÔNG GIAN SÁCH CỦA BẠN</span>
+    <h1 id="page-title">Mỗi cuốn sách, <em>một hành trình mới.</em></h1>
+    <p>Quản lý bộ sưu tập sách của bạn dễ dàng. Khám phá danh sách bên dưới hoặc đăng nhập để thêm đầu sách mới.</p>
+    <a class="hero-link" href="#danh-sach">Khám phá danh sách <span aria-hidden="true">↗</span></a>
+  </div>
+  <div class="hero-art" aria-hidden="true">
+    <span class="orbit orbit-one"></span><span class="orbit orbit-two"></span>
+    <span class="book-spine spine-one"></span><span class="book-spine spine-two"></span><span class="book-spine spine-three"></span>
+    <span class="art-caption">READ · LEARN · GROW</span>
+  </div>
+</section>
+
+<div class="info-strip" aria-label="Thông tin hệ thống">
+  <div><span class="info-icon" aria-hidden="true">#</span><span>Mã sách bắt đầu bằng <strong>{{prefix}}</strong></span></div>
+  <div><span class="info-icon" aria-hidden="true">%</span><span>Thuế VAT <strong>{{vatRate}}%</strong></span></div>
+  <div><span class="info-icon" aria-hidden="true">✓</span><span>Dữ liệu lưu trên MongoDB Atlas</span></div>
+</div>
+
+<div class="content-grid">
+  <aside class="action-panel card" aria-labelledby="action-title">
+    {{#if isAdmin}}
+      <div class="panel-heading">
+        <span class="panel-icon" aria-hidden="true">＋</span>
+        <span><span class="section-kicker">KHU VỰC QUẢN TRỊ</span><h2 id="action-title">Thêm sách mới</h2></span>
+      </div>
+      <p class="panel-description">Điền thông tin sách. Giá sau thuế sẽ được tính tự động khi lưu.</p>
+      <form class="book-form" method="post" action="/books">
+        <div class="field"><label for="book-code">Mã sách</label><input id="book-code" name="code" placeholder="{{prefix}}BOOK001" required><small>Bắt đầu bằng {{prefix}}</small></div>
+        <div class="field"><label for="book-title">Tên sách</label><input id="book-title" name="title" placeholder="Ví dụ: Nhà giả kim" required></div>
+        <div class="field"><label for="book-price">Giá trước thuế (VND)</label><input id="book-price" name="price" type="number" min="0" max="1000000000" step="1" placeholder="100000" required></div>
+        <button class="button button-primary" type="submit">Thêm vào thư viện <span aria-hidden="true">→</span></button>
+      </form>
+      <form class="logout-form" method="post" action="/logout"><button class="button button-quiet" type="submit">Đăng xuất</button></form>
+    {{else}}
+      <div class="panel-heading">
+        <span class="panel-icon" aria-hidden="true">✦</span>
+        <span><span class="section-kicker">KHU VỰC QUẢN TRỊ</span><h2 id="action-title">Thêm sách mới</h2></span>
+      </div>
+      <p class="panel-description">Đăng nhập để bổ sung sách vào bộ sưu tập của bạn.</p>
+      <form class="book-form" method="post" action="/login">
+        <div class="field"><label for="admin-password">Mật khẩu quản trị</label><input id="admin-password" name="password" type="password" placeholder="Nhập mật khẩu" autocomplete="current-password" required></div>
+        <button class="button button-primary" type="submit">Đăng nhập <span aria-hidden="true">→</span></button>
+      </form>
+      <p class="panel-note">Bạn vẫn có thể xem danh sách sách mà không cần đăng nhập.</p>
+    {{/if}}
+  </aside>
+
+  <section class="catalog card" id="danh-sach" aria-labelledby="catalog-title">
+    <div class="catalog-heading">
+      <div><span class="section-kicker">BỘ SƯU TẬP</span><h2 id="catalog-title">Danh sách sách</h2></div>
+      <span class="catalog-badge">Tủ sách của bạn</span>
+    </div>
+    <div class="book-grid">
+      {{#each books}}
+        <article class="book-card">
+          <div class="book-cover" aria-hidden="true"><span>✦</span><i></i></div>
+          <div class="book-details">
+            <span class="book-code">{{this.code}}</span>
+            <h3>{{this.title}}</h3>
+            <div class="price-row"><span>Giá sau thuế</span><strong>{{this.totalPrice}} <small>VND</small></strong></div>
+            <p class="price-note">Giá gốc {{this.basePrice}} VND · VAT {{this.vatRate}}%</p>
+          </div>
+        </article>
+      {{else}}
+        <div class="empty-state"><span class="empty-icon" aria-hidden="true">▤</span><h3>Chưa có sách nào</h3><p>Khi thêm sách mới, bộ sưu tập sẽ xuất hiện tại đây.</p></div>
+      {{/each}}
+    </div>
+  </section>
+</div>
